@@ -1,0 +1,30 @@
+{
+  "name": "fotoszopka",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --open",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agata-dolatowska/fotoszopka.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "bugs": {
+    "url": "https://github.com/agata-dolatowska/fotoszopka/issues"
+  },
+  "homepage": "https://github.com/agata-dolatowska/fotoszopka#readme"
+}
