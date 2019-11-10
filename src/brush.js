@@ -2,9 +2,9 @@ export default class Brush {
     constructor(canvasContext, canvas, settings) {
         this.canvasHtml = canvas;
         this.context = canvasContext;
-        this.settings = settings;
-        this.context.strokeStyle = this.settings.strokeColor;
-        this.context.lineWidth = this.settings.strokeWidth;
+        // this.settings = settings;
+        // this.context.strokeStyle = this.settings.strokeColor;
+        // this.context.lineWidth = this.settings.strokeWidth;
     }
 
     startDrawing(event) {

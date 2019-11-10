@@ -1,10 +1,11 @@
 export default class drawingSettings {
-    constructor() {
+    constructor(context) {
+        this.context = context;
         this.renderSettings = this.renderSettings();
         this.brushType = document.querySelector('.menu-brush .active').dataset.brush;
         this.fillColor = document.querySelector('#fill').value;
         this.strokeColor = document.querySelector('#stroke').value;
-        this.strokeWidth = document.querySelector('#stroke-width').value;
+        this.context.strokeWidth = document.querySelector('#stroke-width').value;
         this.gradientColor = document.querySelector('#fill-gradient').value;
         document.querySelector('.menu-brush').addEventListener('click', e => this.setBrushType(e));
         document.querySelector('#fill').addEventListener('input', () => this.setFillColor());

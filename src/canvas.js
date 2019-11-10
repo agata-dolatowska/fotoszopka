@@ -11,7 +11,7 @@ export default class Canvas {
         this.canvasHtml.width = window.innerWidth;
         this.canvasHtml.height = window.innerHeight;
         this.context = this.canvasHtml.getContext('2d');
-        this.settings = new drawingSettings();
+        this.settings = new drawingSettings(this.context);
         this.canvasHtml.addEventListener('mousedown', e => this.startDrawing(e));
         this.canvasHtml.addEventListener('mousemove', e => this.continueDrawing(e));
         this.canvasHtml.addEventListener('mouseup', e => this.finishDrawing(e));
