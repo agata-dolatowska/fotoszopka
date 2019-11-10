@@ -1,29 +1,24 @@
+import settings from "./drawingSettings";
+
 export default class Rectangle {
-    constructor(canvasContext, canvas, event) {
+    constructor(canvasContext, canvas) {
         this.canvasHtml = canvas;
         this.context = canvasContext;
-        this.e = event;
-        this.canvasCopy;
-        this.strokeColor = '#000000';
-        this.strokeWidth = 10;
-        this.beginDrawX;
-        this.beginDrawY;
-        this.startDrawing = this.startRectangle;
+        this.strokeColor = settings.strokeColor;
+        this.strokeWidth = settings.strokeWidth;
     }
 
-    startRectangle() {
-        console.log("rectangle start");
+    startDrawing(event) {
         this.canvasCopy = this.context.getImageData(0, 0, this.canvasHtml.width, this.canvasHtml.height);
-        this.beginDrawX = this.e.clientX - this.canvasHtml.offsetLeft;
-        this.beginDrawY = this.e.clientY - this.canvasHtml.offsetTop;
+        this.beginDrawX = event.clientX - this.canvasHtml.offsetLeft;
+        this.beginDrawY = event.clientY - this.canvasHtml.offsetTop;
     }
 
-    continueRectangle(event) {
-        this.e = event;
+    continueDrawing(event) {
         this.context.clearRect(0, 0, this.canvasHtml.width, this.canvasHtml.height);
         this.context.putImageData(this.canvasCopy, 0, 0);
-        let currentWidth = (this.e.clientX - this.canvasHtml.offsetLeft) - this.beginDrawX;
-        let currentHeight = (this.e.clientY - this.canvasHtml.offsetTop) - this.beginDrawY;
+        let currentWidth = (event.clientX - this.canvasHtml.offsetLeft) - this.beginDrawX;
+        let currentHeight = (event.clientY - this.canvasHtml.offsetTop) - this.beginDrawY;
         // if (!strokeDisabled.checked) {
         this.context.lineWidth = this.strokeWidth;
         this.context.strokeStyle = this.strokeColor;

@@ -2,7 +2,7 @@ import Brush from "./brush";
 import Line from "./line";
 import Rectangle from './rectangle';
 import Circle from './circle';
-import settings from './drawingSettings';
+import drawingSettings from './drawingSettings';
 
 export default class Canvas {
     constructor() {
@@ -11,59 +11,38 @@ export default class Canvas {
         this.canvasHtml.width = window.innerWidth;
         this.canvasHtml.height = window.innerHeight;
         this.context = this.canvasHtml.getContext('2d');
+        this.settings = new drawingSettings();
         this.canvasHtml.addEventListener('mousedown', e => this.startDrawing(e));
-        // this.canvasHtml.addEventListener('mousemove', e => this.continueDrawing(e));
+        this.canvasHtml.addEventListener('mousemove', e => this.continueDrawing(e));
         this.canvasHtml.addEventListener('mouseup', e => this.finishDrawing(e));
 
         this.brushTypes = {
-            'brush': new Brush(this.context, this.canvasHtml, e),
-            'line': new Line(this.context, this.canvasHtml, e),
-            'rectangle': new Rectangle(this.context, this.canvasHtml, e),
-            'circle': new Circle(this.context, this.canvasHtml, e)
+            'brush': new Brush(this.context, this.canvasHtml, this.settings),
+            'line': new Line(this.context, this.canvasHtml, this.settings),
+            'rectangle': new Rectangle(this.context, this.canvasHtml, this.settings),
+            'circle': new Circle(this.context, this.canvasHtml, this.settings)
         };
+
         this.drawingHistory = [];
         this.canDraw = false;
     }
 
     startDrawing(e) {
         this.canDraw = true;
-
-        console.log(settings.brushType);
-        this.brushTypes[settings.brushType].startDrawing();
+        this.brushTypes[this.settings.brushType].startDrawing(e);
     }
 
     continueDrawing(e) {
-        // console.log(settings.brushType);
         if (this.canDraw) {
-            const brushTypes = {
-                'brush': () => this.brush.continueBrush,
-                'line': () => this.line.continueLine,
-                'rectangle': () => this.rectangle.continueRectangle,
-                'circle': () => this.circle.continueCircle
-            }
-            brushTypes[settings.brushType];
-
-            // switch (settings.brushType) {
-            //     case 'brush':
-            //         this.brush.continueBrush(e);
-            //         break;
-            //     case 'line':
-            //         this.line.continueLine(e);
-            //         break;
-            //     case 'rectangle':
-            //         this.rectangle.continueRectangle(e);
-            //         break;
-            //     case 'circle':
-            //         this.circle.continueCircle(e);
-            //         break;
-            // }
+            this.brushTypes[this.settings.brushType].continueDrawing(e);
         }
     }
 
     finishDrawing(e) {
-        // console.log("koniec");
+        if (this.canDraw) {
+            this.context.closePath();
+        }
         this.canDraw = false;
-        this.context.closePath();
     }
 
     renderCanvas() {

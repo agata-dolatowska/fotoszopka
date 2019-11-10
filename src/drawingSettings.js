@@ -1,4 +1,4 @@
-class drawingSettings {
+export default class drawingSettings {
     constructor() {
         this.renderSettings = this.renderSettings();
         this.brushType = document.querySelector('.menu-brush .active').dataset.brush;
@@ -6,10 +6,35 @@ class drawingSettings {
         this.strokeColor = document.querySelector('#stroke').value;
         this.strokeWidth = document.querySelector('#stroke-width').value;
         this.gradientColor = document.querySelector('#fill-gradient').value;
-        this.kupa = this.kupa();
+        document.querySelector('.menu-brush').addEventListener('click', e => this.setBrushType(e));
+        document.querySelector('#fill').addEventListener('input', () => this.setFillColor());
+        document.querySelector('#stroke').addEventListener('input', () => this.setStrokeColor());
+        document.querySelector('#stroke-width').addEventListener('input', e => this.setStrokeWidth(e));
+        document.querySelector('#fill-gradient').addEventListener('input', e => this.setGradientColor(e));
     }
-    kupa() {
-        // console.log(this.brushType);
+
+    setBrushType(event) {
+        document.querySelector('.menu-brush .active').classList.remove('active');
+        event.target.classList.add('active');
+        this.brushType = document.querySelector('.menu-brush .active').dataset.brush;
+    }
+
+    setFillColor() {
+        this.fillColor = document.querySelector('#fill').value;
+    }
+
+    setStrokeColor() {
+        this.strokeColor = document.querySelector('#stroke').value;
+        console.log(this.strokeColor);
+    }
+
+    setStrokeWidth(e) {
+        this.strokeWidth = e.target.value;
+        console.log(this.strokeWidth);
+    }
+
+    setGradientColor() {
+        this.gradientColor = document.querySelector('#fill-gradient').value;
     }
 
     renderSettings() {
@@ -40,5 +65,5 @@ class drawingSettings {
         document.querySelector('body').insertAdjacentHTML('afterbegin', html);
     }
 }
-const settings = new drawingSettings();
-export default settings;
+// const settings = new drawingSettings();
+// export default settings;

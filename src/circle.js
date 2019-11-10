@@ -1,22 +1,17 @@
 export default class Circle {
-    constructor(canvasContext, canvas, event) {
+    constructor(canvasContext, canvas) {
         this.canvasHtml = canvas;
         this.context = canvasContext;
-        this.e = event;
-        this.canvasCopy;
-        this.beginDrawX;
-        this.beginDrawY;
-        this.startDrawing = this.startCircle;
     }
 
-    startCircle() {
+    startDrawing(event) {
         console.log("kółko start");
         this.canvasCopy = this.context.getImageData(0, 0, this.canvasHtml.width, this.canvasHtml.height);
-        this.beginDrawX = this.e.clientX - this.canvasHtml.offsetLeft;
-        this.beginDrawY = this.e.clientY - this.canvasHtml.offsetTop;
+        this.beginDrawX = event.clientX - this.canvasHtml.offsetLeft;
+        this.beginDrawY = event.clientY - this.canvasHtml.offsetTop;
     }
 
-    continueCircle(event) {
+    continueDrawing(event) {
         console.log("kółko rysu rysu");
         this.e = event;
         this.context.clearRect(0, 0, this.canvasHtml.width, this.canvasHtml.height);
