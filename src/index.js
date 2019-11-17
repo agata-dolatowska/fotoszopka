@@ -1,3 +1,3 @@
-import Canvas from './canvas.js';
+import Canvas from "./canvas.js";
 
 const canvas = new Canvas();
