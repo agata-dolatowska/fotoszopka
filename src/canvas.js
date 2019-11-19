@@ -2,6 +2,7 @@ import Brush from "./brush";
 import Line from "./line";
 import Rectangle from "./rectangle";
 import Circle from "./circle";
+import Eraser from "./eraser";
 import drawingSettings from "./drawingSettings";
 
 export default class Canvas {
@@ -20,15 +21,18 @@ export default class Canvas {
       brush: new Brush(this.context, this.canvasHtml, this.settings),
       line: new Line(this.context, this.canvasHtml, this.settings),
       rectangle: new Rectangle(this.context, this.canvasHtml, this.settings),
-      circle: new Circle(this.context, this.canvasHtml, this.settings)
+      circle: new Circle(this.context, this.canvasHtml, this.settings),
+      eraser: new Eraser(this.context, this.canvasHtml, this.settings)
     };
 
     this.canDraw = false;
   }
 
   startDrawing(e) {
-    this.canDraw = true;
-    this.brushTypes[this.settings.brushType].startDrawing(e);
+    if (this.settings.brushType != "color-picker") {
+      this.canDraw = true;
+      this.brushTypes[this.settings.brushType].startDrawing(e);
+    }
   }
 
   continueDrawing(e) {
@@ -42,7 +46,10 @@ export default class Canvas {
       this.context.closePath();
     }
     this.canDraw = false;
-    console.log(this.settings.drawingHistory);
+    if (this.settings.brushType == "eraser") {
+      console.log("oddaj kolorka");
+      this.settings.setValues();
+    }
     this.settings.drawingHistory.push(
       this.context.getImageData(
         0,

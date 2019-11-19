@@ -3,27 +3,8 @@ export default class drawingSettings {
     this.context = context;
     this.canvasHtml = canvas;
     this.renderSettings();
-    this.brushType = document.querySelector(
-      ".menu-brush .active"
-    ).dataset.brush;
     this.optionsAvailability();
-    this.setGradientColor();
-    this.setFillColor();
-    document
-      .querySelector(".menu-brush")
-      .addEventListener("click", e => this.setBrushType(e));
-    document
-      .querySelector("#fill")
-      .addEventListener("input", () => this.setFillColor());
-    document
-      .querySelector("#stroke")
-      .addEventListener("input", () => this.setStrokeColor());
-    document
-      .querySelector("#stroke-width")
-      .addEventListener("input", () => this.setStrokeWidth());
-    document
-      .querySelector("#fill-gradient")
-      .addEventListener("input", () => this.setGradientColor());
+    this.setValues();
     document
       .querySelector(".clear")
       .addEventListener("click", () => this.clearCanvas());
@@ -42,8 +23,16 @@ export default class drawingSettings {
     this.optionsAvailability();
   }
 
+  setEraserWidth(eraserWidthInput) {
+    this.context.eraserWidth = eraserWidthInput.value;
+  }
+
   optionsAvailability() {
-    if (this.brushType == "brush" || this.brushType == "line") {
+    if (
+      this.brushType == "brush" ||
+      this.brushType == "line" ||
+      this.brushType == "eraser"
+    ) {
       document.querySelector("#fill-disabled").disabled = true;
       document.querySelector("#gradient-disabled").disabled = true;
       document.querySelector("#fill-disabled").checked = true;
@@ -56,21 +45,80 @@ export default class drawingSettings {
     }
   }
 
-  setFillColor() {
-    this.context.fillStyle = document.querySelector("#fill").value;
-    this.context.gradientBaseColor = document.querySelector("#fill").value;
+  setValues() {
+    this.brushType = document.querySelector(
+      ".menu-brush .active"
+    ).dataset.brush;
+
+    this.gradientInput = document.querySelector("#fill");
+    this.fillInput = document.querySelector("#fill");
+    this.setFillColor(this.fillInput);
+    this.gradientInput = document.querySelector("#fill-gradient");
+    this.setGradientColor(this.gradientInput);
+    this.strokeWidthInput = document.querySelector("#stroke-width");
+    this.setStrokeWidth(this.strokeWidthInput);
+    this.strokeColorInput = document.querySelector("#stroke");
+    this.setStrokeColor(this.strokeColorInput);
+    this.eraserWidthInput = document.querySelector("#eraser-width");
+    this.setEraserWidth(this.eraserWidthInput);
+
+    document
+      .querySelector("#color-picker")
+      .addEventListener("click", () => this.getColorFromCanvas());
+
+    document
+      .querySelector(".menu-brush")
+      .addEventListener("click", e => this.setBrushType(e));
+
+    this.eraserWidthInput.addEventListener("input", e =>
+      this.setEraserWidth(this.eraserWidthInput)
+    );
+
+    this.fillInput.addEventListener("input", e =>
+      this.setFillColor(this.fillInput)
+    );
+    this.strokeColorInput.addEventListener("input", e =>
+      this.setStrokeColor(this.strokeColorInput)
+    );
+    this.strokeWidthInput.addEventListener("input", e =>
+      this.setStrokeWidth(this.strokeWidthInput)
+    );
+    this.gradientInput.addEventListener("input", e =>
+      this.setGradientColor(this.gradientInput)
+    );
   }
 
-  setStrokeColor() {
-    this.context.strokeStyle = document.querySelector("#stroke").value;
+  setFillColor(fillInput) {
+    this.context.fillStyle = fillInput.value;
+    this.context.gradientBaseColor = fillInput.value;
   }
 
-  setStrokeWidth() {
-    this.context.lineWidth = document.querySelector("#stroke-width").value;
+  setStrokeColor(strokeColorInput) {
+    this.context.strokeStyle = strokeColorInput.value;
   }
 
-  setGradientColor() {
-    this.context.gradientColor = document.querySelector("#fill-gradient").value;
+  setStrokeWidth(strokeWidthInput) {
+    this.context.lineWidth = strokeWidthInput.value;
+  }
+
+  setGradientColor(gradientInput) {
+    this.context.gradientColor = gradientInput.value;
+  }
+
+  getColorFromCanvas() {
+    this.canvasHtml.addEventListener("mousemove", e => {
+      const color = this.context.getImageData(e.layerX, e.layerY, 1, 1).data;
+
+      const colorKUPA = Array.prototype.slice.call(color);
+      const rgbaElementsToHex = colorKUPA.map(rgbaEl =>
+        rgbaEl.toString(16).length == 1
+          ? "0" + rgbaEl.toString(16)
+          : rgbaEl.toString(16)
+      );
+      const hexColor = `#${rgbaElementsToHex[0]}${rgbaElementsToHex[1]}${rgbaElementsToHex[2]}`;
+
+      document.querySelector("#fill").value = hexColor;
+    });
   }
 
   clearCanvas() {
@@ -102,6 +150,8 @@ export default class drawingSettings {
                 <button data-brush='circle'>Circle</button>
                 <button data-brush='rectangle'>Rectangle</button>
                 <button data-brush='line'>Line</button>
+                <button data-brush='eraser'>Eraser</button>
+                <button data-brush='color-picker' id="color-picker">Color picker</button>
             </div>
             <div class='menu-colors'>
                 <label for='fill'>main fill color</label>
@@ -115,7 +165,9 @@ export default class drawingSettings {
                 <label for='stroke'>| stroke</label>
                 <input type='color' id='stroke' value='#000000'>
                 <label><input type='checkbox' id='stroke-disabled'>no stroke</label>
-                <input type='range' name='points' value='3' min='1' max='10' id='stroke-width'>stroke width
+                <input type='range' value='3' min='1' max='10' id='stroke-width'>stroke width
+                <input type='range' value='10' min='1' max='10' id='eraser-width'>eraser width
+
             </div>
             <button class='undo'>undo</button>
             <button class='clear'>clear</button>
