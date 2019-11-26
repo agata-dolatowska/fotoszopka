@@ -15,12 +15,20 @@ export default class drawingSettings {
   }
 
   setBrushType(event) {
+    // console.log(this.lastTool);
+
+    //poprzednia oraz obecna spr
+    if (this.lastTool == "color-picker") {
+      console.log("poprzednia pipetka");
+      this.canvasHtml.removeEventListener("mousemove", this.getColorFromCanvas);
+    }
     document.querySelector(".menu-brush .active").classList.remove("active");
     event.target.classList.add("active");
     this.brushType = document.querySelector(
       ".menu-brush .active"
     ).dataset.brush;
     this.optionsAvailability();
+    this.lastTool = document.querySelector(".menu-brush .active").dataset.brush;
   }
 
   setEraserWidth(eraserWidthInput) {
@@ -64,7 +72,11 @@ export default class drawingSettings {
 
     document
       .querySelector("#color-picker")
-      .addEventListener("click", () => this.getColorFromCanvas());
+      .addEventListener("click", () =>
+        this.canvasHtml.addEventListener("mousemove", e =>
+          this.getColorFromCanvas(e)
+        )
+      );
 
     document
       .querySelector(".menu-brush")
@@ -105,20 +117,30 @@ export default class drawingSettings {
     this.context.gradientColor = gradientInput.value;
   }
 
-  getColorFromCanvas() {
-    this.canvasHtml.addEventListener("mousemove", e => {
-      const color = this.context.getImageData(e.layerX, e.layerY, 1, 1).data;
+  getColorFromCanvas(e) {
+    // this.canvasHtml.addEventListener("mousemove", getColor.bind(this));
 
-      const colorKUPA = Array.prototype.slice.call(color);
-      const rgbaElementsToHex = colorKUPA.map(rgbaEl =>
-        rgbaEl.toString(16).length == 1
-          ? "0" + rgbaEl.toString(16)
-          : rgbaEl.toString(16)
-      );
-      const hexColor = `#${rgbaElementsToHex[0]}${rgbaElementsToHex[1]}${rgbaElementsToHex[2]}`;
+    // function getColor(e) {
+    // console.log(this.lastTool);
+    // if (this.lastTool == "color-picker") {
+    //   console.log("poprzednia pipetka");
+    //   this.canvasHtml.removeEventListener(
+    //     "mousemove",
+    //     this.settings.getColor
+    //   );
+    // }
+    const color = this.context.getImageData(e.layerX, e.layerY, 1, 1).data;
+    const colorKUPA = Array.prototype.slice.call(color);
+    const rgbaElementsToHex = colorKUPA.map(rgbaEl =>
+      rgbaEl.toString(16).length == 1
+        ? "0" + rgbaEl.toString(16)
+        : rgbaEl.toString(16)
+    );
+    const hexColor = `#${rgbaElementsToHex[0]}${rgbaElementsToHex[1]}${rgbaElementsToHex[2]}`;
 
-      document.querySelector("#fill").value = hexColor;
-    });
+    document.querySelector("#fill").value = hexColor;
+    // ??
+    // this.canvasHtml.removeEventListener("mousemove", getColor);
   }
 
   clearCanvas() {
@@ -151,6 +173,7 @@ export default class drawingSettings {
                 <button data-brush='rectangle'>Rectangle</button>
                 <button data-brush='line'>Line</button>
                 <button data-brush='eraser'>Eraser</button>
+                <button data-brush='text'>Text</button>
                 <button data-brush='color-picker' id="color-picker">Color picker</button>
             </div>
             <div class='menu-colors'>

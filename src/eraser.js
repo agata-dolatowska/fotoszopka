@@ -14,7 +14,6 @@ export default class Eraser {
     this.context.strokeStyle = "#000000";
     this.context.fillStyle = "#FFFFFF";
     this.context.lineWidth = 1;
-    this.continueDrawing();
   }
 
   continueDrawing(event) {
