@@ -38,7 +38,7 @@ export default class Rectangle {
         currentHeight
       );
     }
-    if (!document.querySelector("#gradient-disabled").checked) {
+    if (!document.querySelector("#fill-gradient-disabled").checked) {
       const gradient = this.context.createLinearGradient(
         this.beginDrawX,
         this.beginDrawY,

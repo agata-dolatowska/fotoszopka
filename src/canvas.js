@@ -38,7 +38,7 @@ export default class Canvas {
   }
 
   continueDrawing(e) {
-    if (this.canDraw) {
+    if (this.canDraw && this.settings.brushType != "text") {
       this.brushTypes[this.settings.brushType].continueDrawing(e);
     }
   }

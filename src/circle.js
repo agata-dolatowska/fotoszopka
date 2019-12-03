@@ -38,7 +38,7 @@ export default class Circle {
     if (!document.querySelector("#fill-disabled").checked) {
       this.context.fill();
     }
-    if (!document.querySelector("#gradient-disabled").checked) {
+    if (!document.querySelector("#fill-gradient-disabled").checked) {
       const currentWidth =
         this.e.clientX - this.canvasHtml.offsetLeft - this.beginDrawX;
       const gradient = this.context.createRadialGradient(

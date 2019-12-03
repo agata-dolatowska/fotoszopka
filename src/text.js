@@ -15,11 +15,11 @@ export default class Text {
       this.canvasHtml.height
     );
     if (this.eventActive) {
-      console.log("usuwaj :<");
-      window.removeEventListener("keydown", this.typeText);
+      window.removeEventListener("keydown", this.typeTextEvent);
       this.eventActive = false;
     }
-    window.addEventListener("keydown", e => this.typeText(e));
+    this.typeTextEvent = e => this.typeText(e);
+    window.addEventListener("keydown", this.typeTextEvent);
   }
 
   typeText(e) {
@@ -29,6 +29,4 @@ export default class Text {
     this.context.fillText(this.typedText, this.beginDrawX, this.beginDrawY);
     this.eventActive = true;
   }
-
-  continueDrawing() {}
 }
